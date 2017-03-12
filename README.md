@@ -14,6 +14,18 @@
 
 
 ##Results
+###Test Machine
+####System Specs
+* __Processor__:Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz 2.59GHz
+* __RAM__:16.0 GB
+* __Native OS__:Windows 10 64-bit
+####Ambient
+* __Number of cores available__: 4
+    - With "Virtualize CPU Performance Counters"
+* __OS__: Lubuntu 16.10 64-bit emulated using VMware Workstation 12 Player
+* __RAM__:3072 MB 
+
+
 ###Exercise 1
 
 | Language | Lines | Columns | Time (seconds) | Result                                                                                                        | L1          | L2           |
