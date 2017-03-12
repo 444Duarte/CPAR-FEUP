@@ -21,9 +21,9 @@
 * __Native OS__:Windows 10 64-bit
 
 ####Ambient
+* __OS__: Lubuntu 16.10 64-bit emulated using VMware Workstation 12 Player
 * __Number of cores available__: 4
     - With "Virtualize CPU Performance Counters"
-* __OS__: Lubuntu 16.10 64-bit emulated using VMware Workstation 12 Player
 * __RAM__:3072 MB 
 
 
