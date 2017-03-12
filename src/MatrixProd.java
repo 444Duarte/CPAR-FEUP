@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.min;
+
 public class MatrixProd{
 	static void onMultLine(int m_ar, int m_br){
 
@@ -45,6 +47,13 @@ public class MatrixProd{
 		elapsedTime = end-init;
 
 		System.out.println("Time: "+((double)elapsedTime / 1000000000.0)+" seconds");
+
+		System.out.println("Result matrix: ");
+		for(i=0; i<1; i++)
+		{	for(j=0; j<min(10,m_br); j++)
+			System.out.print((long)phc[j]+" ");
+		}
+		System.out.println();
 	}
 
 	public static void main(String[] args){
