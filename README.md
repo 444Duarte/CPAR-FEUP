@@ -19,6 +19,7 @@
 * __Processor__:Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz 2.59GHz
 * __RAM__:16.0 GB
 * __Native OS__:Windows 10 64-bit
+
 ####Ambient
 * __Number of cores available__: 4
     - With "Virtualize CPU Performance Counters"
