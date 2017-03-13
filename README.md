@@ -9,7 +9,7 @@
 
 ###Compile
 ```
-    gcc matrixprod.cpp -O2 -lstdc++ -lpapi -o matrixprod 
+    gcc matrixprod.cpp -O2 -lstdc++ -lpapi -fopenmp -o matrixprod 
 ```
 
 

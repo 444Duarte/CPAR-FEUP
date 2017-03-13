@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <time.h>
 #include <cstdlib>
+#include <omp.h>
 #include <papi.h>
 
 using namespace std;
@@ -69,8 +70,6 @@ void OnMult(int m_ar, int m_br)
     free(pha);
     free(phb);
     free(phc);
-	
-	
 }
 
 
@@ -129,6 +128,150 @@ void OnMultLine(int m_ar, int m_br)
     
 }
 
+void MTOnMult(int m_ar, int m_br,int numThreads){
+	SYSTEMTIME Time1, Time2;
+	
+	char st[100];
+	double temp;
+	int i, j, k;
+
+	double *pha, *phb, *phc;
+	
+
+		
+    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
+
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			pha[i*m_ar + j] = (double)1.0;
+
+
+
+	for(i=0; i<m_br; i++)
+		for(j=0; j<m_br; j++)
+			phb[i*m_br + j] = (double)(i+1);
+
+
+
+    Time1 = clock();
+
+    if(numThreads == 0){
+    	#pragma omp for private(i,j,k)
+		for(i=0; i<m_ar; i++)
+		{	
+			for( j=0; j<m_br; j++)
+			{	
+				temp = 0;
+
+				for( k=0; k<m_ar; k++)
+				{	
+					temp += pha[i*m_ar+k] * phb[k*m_br+j];
+				}
+				phc[i*m_ar+j]=temp;
+			}
+		}
+    }else{
+    	#pragma omp parallel for private(i,j,k) num_threads(numThreads)
+		for(i=0; i<m_ar; i++)
+		{	
+			for( j=0; j<m_br; j++)
+			{	
+				temp = 0;
+
+				for( k=0; k<m_ar; k++)
+				{	
+					temp += pha[i*m_ar+k] * phb[k*m_br+j];
+				}
+				phc[i*m_ar+j]=temp;
+			}
+		}
+    }
+    
+
+
+    Time2 = clock();
+	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+	cout << st;
+
+	cout << "Result matrix: " << endl;
+	for(i=0; i<1; i++)
+	{	for(j=0; j<min(10,m_br); j++)
+			cout << phc[j] << " ";
+	}
+	cout << endl;
+
+    free(pha);
+    free(phb);
+    free(phc);
+}
+
+void MTOnLineMult(int m_ar, int m_br,int numThreads){
+	
+	SYSTEMTIME Time1, Time2;
+	
+	char st[100];
+	double temp;
+	int i, j, k;
+
+	double *pha, *phb, *phc;
+		
+    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
+
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			pha[i*m_ar + j] = (double)1.0;
+
+
+
+	for(i=0; i<m_br; i++)
+		for(j=0; j<m_br; j++)
+			phb[i*m_br + j] = (double)(i+1);
+
+
+
+    Time1 = clock();
+
+    if(numThreads == 0){
+    	#pragma omp for private(i,k,j)
+		for(i = 0; i < m_ar ; i++){
+			for(k = 0; k < m_ar; k++){
+				for(j = 0; j < m_br; j++){
+			    	phc[i*m_br+j] += pha[i*m_ar+k] * phb[k*m_br+j];    
+				}
+			}		
+		}
+    }
+    else{
+    	#pragma omp parallel for num_threads(numThreads) private(i,k,j)
+		for(i = 0; i < m_ar ; i++){
+			for(k = 0; k < m_ar; k++){
+				for(j = 0; j < m_br; j++){
+			    	phc[i*m_br+j] += pha[i*m_ar+k] * phb[k*m_br+j];    
+				}
+			}		
+		}
+    }
+    
+
+    Time2 = clock();
+	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+	cout << st;
+
+	cout << "Result matrix: " << endl;
+	for(i=0; i<1; i++)
+	{	for(j=0; j<min(10,m_br); j++)
+			cout << phc[j] << " ";
+	}
+	cout << endl;
+
+    free(pha);
+    free(phb);
+    free(phc);
+}
 
 float produtoInterno(float *v1, float *v2, int col)
 {
@@ -167,7 +310,7 @@ int main (int argc, char *argv[])
 
 	char c;
 	int lin, col, nt=1;
-	int op;
+	int op, numThreads;
 	
 	int EventSet = PAPI_NULL;
   	long long values[2];
@@ -195,6 +338,8 @@ int main (int argc, char *argv[])
 	do {
 		cout << endl << "1. Multiplication" << endl;
 		cout << "2. Line Multiplication" << endl;
+		cout << "3. Multi-Thread Multiplication" << endl;
+		cout << "4. Multi-Thread Line Multiplication" << endl;
 		cout << "Selection?: ";
 		cin >>op;
 		if (op == 0)
@@ -214,7 +359,18 @@ int main (int argc, char *argv[])
 				break;
 			case 2:
 				OnMultLine(lin, col);
-    
+    			break;
+    		case 3:
+    			cout << "Number of procs: " << omp_get_num_procs() << endl;
+    			cout << "numThreads? (0 = automatic)";
+    			cin >> numThreads;
+    			MTOnMult(lin,col,numThreads);
+				break;
+			case 4:
+				cout << "Number of procs: " << omp_get_num_procs() << endl;
+    			cout << "NumThreads? (0 = automatic)";
+    			cin >> numThreads;
+    			MTOnLineMult(lin,col,numThreads);
 				break;
 		}
 
