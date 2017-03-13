@@ -155,4 +155,4 @@
 
 ##Conclusion
 In the tests made in a personal computer, inside a virtual machine and with other programs in the background, despite some predictability in the results, they were not fully conclusive and there were some unexpected results. The main cause might have been the noise in the background made by the other programs together with the limitations of a virtualized environment.
-This proved that a more sterilized environment was need in order to reach the expected results
+This proved that a more sterilized environment was needed in order to reach the expected results
