@@ -22,14 +22,13 @@
 
 ##Results and analysis
 ### Personal Computer
-####Test Machine
-#####System Specs
+####System Specs
 * __Processor__:Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz 2.59GHz
 * __RAM__:16.0 GB
 * __Native OS__:Windows 10 64-bit
 * __System Type__: Laptop
 
-#####Ambient
+####Ambient
 * __OS__: Lubuntu 16.10 64-bit emulated using VMware Workstation 12 Player
 * __Number of cores available__: 4
     - With "Virtualize CPU Performance Counters"
@@ -156,4 +155,4 @@
 
 ##Conclusion
 In the tests made in a personal computer, inside a virtual machine and with other programs in the background, despite some predictability in the results, they were not fully conclusive and there were some unexpected results. The main cause might have been the noise in the background made by the other programs together with the limitations of a virtualized environment.
-This proved that a more sterilized environment was need in order to reach the expected results
+This proved that a more sterilized environment was needed in order to reach the expected results
