@@ -1,34 +1,17 @@
-//#include <omp.h>
+#include <omp.h>
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
 #include <time.h>
 #include <cstdlib>
-#include <omp.h>
 #include <papi.h>
 
 using namespace std;
 
 #define SYSTEMTIME clock_t
 
- 
-void OnMult(int m_ar, int m_br) 
-{
-	
-	SYSTEMTIME Time1, Time2;
-	
-	char st[100];
-	double temp;
-	int i, j, k;
-
-	double *pha, *phb, *phc;
-	
-
-		
-    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
-	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
-	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
-
+void fillMatrix(double *pha, double *phb, int m_ar, int m_br){
+	int i, j;
 	for(i=0; i<m_ar; i++)
 		for(j=0; j<m_ar; j++)
 			pha[i*m_ar + j] = (double)1.0;
@@ -38,7 +21,37 @@ void OnMult(int m_ar, int m_br)
 	for(i=0; i<m_br; i++)
 		for(j=0; j<m_br; j++)
 			phb[i*m_br + j] = (double)(i+1);
+}
 
+void displayResults(SYSTEMTIME Time1, SYSTEMTIME Time2, double *phc, int m_br){
+	char st[100];
+	int i, j;
+	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+	cout << st;
+
+	cout << "Result matrix: " << endl;
+	for(i=0; i<1; i++)
+	{	for(j=0; j<min(10,m_br); j++)
+			cout << phc[j] << " ";
+	}
+	cout << endl;
+}
+ 
+void OnMult(int m_ar, int m_br) {
+	
+	SYSTEMTIME Time1, Time2;
+	
+	
+	double temp;
+	int i, j, k;
+
+	double *pha, *phb, *phc;
+    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
+
+	
+	fillMatrix(pha,phb,m_ar,m_br);
 
 
     Time1 = clock();
@@ -57,15 +70,8 @@ void OnMult(int m_ar, int m_br)
 
 
     Time2 = clock();
-	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
-	cout << st;
-
-	cout << "Result matrix: " << endl;
-	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
-			cout << phc[j] << " ";
-	}
-	cout << endl;
+	
+    displayResults(Time1,Time2,phc, m_br);
 
     free(pha);
     free(phb);
@@ -81,25 +87,12 @@ void OnMultLine(int m_ar, int m_br)
 	double temp;
 	int i, j, k;
 
-	double *pha, *phb, *phc;
-	
-
-		
+	double *pha, *phb, *phc;		
     pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
-	for(i=0; i<m_ar; i++)
-		for(j=0; j<m_ar; j++)
-			pha[i*m_ar + j] = (double)1.0;
-
-
-
-	for(i=0; i<m_br; i++)
-		for(j=0; j<m_br; j++)
-			phb[i*m_br + j] = (double)(i+1);
-
-
+	fillMatrix(pha,phb,m_ar,m_br);
 
     Time1 = clock();
 
@@ -112,15 +105,7 @@ void OnMultLine(int m_ar, int m_br)
 	}
 
     Time2 = clock();
-	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
-	cout << st;
-
-	cout << "Result matrix: " << endl;
-	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
-			cout << phc[j] << " ";
-	}
-	cout << endl;
+    displayResults(Time1,Time2,phc, m_br);
 
     free(pha);
     free(phb);
@@ -136,24 +121,11 @@ void MTOnMult(int m_ar, int m_br,int numThreads){
 	int i, j, k;
 
 	double *pha, *phb, *phc;
-	
-
-		
     pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
-	for(i=0; i<m_ar; i++)
-		for(j=0; j<m_ar; j++)
-			pha[i*m_ar + j] = (double)1.0;
-
-
-
-	for(i=0; i<m_br; i++)
-		for(j=0; j<m_br; j++)
-			phb[i*m_br + j] = (double)(i+1);
-
-
+	fillMatrix(pha,phb,m_ar,m_br);
 
     Time1 = clock();
 
@@ -192,15 +164,7 @@ void MTOnMult(int m_ar, int m_br,int numThreads){
 
 
     Time2 = clock();
-	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
-	cout << st;
-
-	cout << "Result matrix: " << endl;
-	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
-			cout << phc[j] << " ";
-	}
-	cout << endl;
+    displayResults(Time1,Time2,phc, m_br);
 
     free(pha);
     free(phb);
@@ -215,23 +179,12 @@ void MTOnLineMult(int m_ar, int m_br,int numThreads){
 	double temp;
 	int i, j, k;
 
-	double *pha, *phb, *phc;
-		
+	double *pha, *phb, *phc;	
     pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
-	for(i=0; i<m_ar; i++)
-		for(j=0; j<m_ar; j++)
-			pha[i*m_ar + j] = (double)1.0;
-
-
-
-	for(i=0; i<m_br; i++)
-		for(j=0; j<m_br; j++)
-			phb[i*m_br + j] = (double)(i+1);
-
-
+	fillMatrix(pha,phb,m_ar,m_br);
 
     Time1 = clock();
 
@@ -258,15 +211,7 @@ void MTOnLineMult(int m_ar, int m_br,int numThreads){
     
 
     Time2 = clock();
-	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
-	cout << st;
-
-	cout << "Result matrix: " << endl;
-	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
-			cout << phc[j] << " ";
-	}
-	cout << endl;
+    displayResults(Time1,Time2,phc, m_br);
 
     free(pha);
     free(phb);
@@ -362,13 +307,13 @@ int main (int argc, char *argv[])
     			break;
     		case 3:
     			cout << "Number of procs: " << omp_get_num_procs() << endl;
-    			cout << "numThreads? (0 = automatic)";
+    			cout << "numThreads?(0 = automatic): ";
     			cin >> numThreads;
     			MTOnMult(lin,col,numThreads);
 				break;
 			case 4:
 				cout << "Number of procs: " << omp_get_num_procs() << endl;
-    			cout << "NumThreads? (0 = automatic)";
+    			cout << "NumThreads?(0 = automatic): ";
     			cin >> numThreads;
     			MTOnLineMult(lin,col,numThreads);
 				break;
