@@ -2,40 +2,40 @@
 
 [Instructions](doc/CPAR_ex1.pdf)
 
-##Compiling
-##Prerequisites
+## Compiling
+## Prerequisites
 * [GCC, the GNU Compiler Collection](https://gcc.gnu.org/)
 * [PAPI](http://icl.utk.edu/papi/)
 
-###Compile
+### Compile
 ```
     gcc matrixprod.cpp -O2 -lstdc++ -lpapi -fopenmp -o matrixprod 
 ```
 
 
 
-##Problem Description
+## Problem Description
 
-###Algorithms Explanation
+### Algorithms Explanation
 
-##Performanc Metrics and evaluation methodology
+## Performanc Metrics and evaluation methodology
 
-##Results and analysis
+## Results and analysis
 ### Personal Computer
-####System Specs
+#### System Specs
 * __Processor__:Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz 2.59GHz
 * __RAM__:16.0 GB
 * __Native OS__:Windows 10 64-bit
 * __System Type__: Laptop
 
-####Ambient
+#### Ambient
 * __OS__: Lubuntu 16.10 64-bit emulated using VMware Workstation 12 Player
 * __Number of cores available__: 4
     - With "Virtualize CPU Performance Counters"
 * __RAM__:3072 MB 
 
 
-####Exercise 1
+#### Exercise 1
 
 | Language | Lines | Columns | Time (seconds) | Result                                                                                                        | L1 DCM      | L2 DCM       |
 |----------|-------|---------|----------------|---------------------------------------------------------------------------------------------------------------|-------------|--------------|
@@ -54,8 +54,8 @@
 | Java     | 2600  | 2600    | 303.229170491  | 3381300 3381300 3381300 3381300 3381300 3381300 3381300 3381300 3381300 3381300                               | -           | -            |
 | Java     | 3000  | 3000    | 480.991397112  | 4501500 4501500 4501500 4501500 4501500 4501500 4501500 4501500 4501500 4501500                               | -           | -            |
 
-####Exercise 2
-#####600x600 to 3000x3000 (increments 400)
+#### Exercise 2
+##### 600x600 to 3000x3000 (increments 400)
 
 | Language | Lines | Columns | Time (seconds) | Result                                                                                                        | L1 DCM     | L2 DCM     |
 |----------|-------|---------|----------------|---------------------------------------------------------------------------------------------------------------|------------|------------|
@@ -76,7 +76,7 @@
 
 
 
-#####4000x4000 to 10000x10000 (increments 2000)
+##### 4000x4000 to 10000x10000 (increments 2000)
 
 | Language | Lines | Columns | Time (seconds) | Result                                                                                                        | L1 DCM      | L2 DCM      |
 |----------|-------|---------|----------------|---------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -87,8 +87,8 @@
 | Java     | 4000  | 4000    | 74.958529341   | 8002000 8002000 8002000 8002000 8002000 8002000 8002000 8002000 8002000 8002000                               | -           | -           |
 | Java     | 6000  | 6000    | -----------    | Unable to do test: Java Heap space error (not enough memory to do test)                                       | -           | -           |
 
-####Exercise 3
-#####Normal Matrix Multiplication
+#### Exercise 3
+##### Normal Matrix Multiplication
 | Threads | Lines | Columns | Time (seconds) | Result                                                                                                        | L1 DCM      | L2 DCM       |
 |---------|-------|---------|----------------|---------------------------------------------------------------------------------------------------------------|-------------|--------------|
 | 1       | 600   | 600     | 0.454          | 180300 180300 180300 180300 180300 180300 180300 180300 180300 180300                                         | 245285593   | 47056220     |
@@ -120,7 +120,7 @@
 | 4       | 2600  | 2600    | 187.151        | 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 3.3813e+06 | 8250244764  | 17235248852  |
 | 4       | 3000  | 3000    | 298.406        | 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 | 13436389312 | 30241321250  |
 
-#####Line Multiplication
+##### Line Multiplication
 | Threads | Lines | Columns | Time (seconds) | Result                                                                                                        | L1 DCM     | L2 DCM     |
 |---------|-------|---------|----------------|---------------------------------------------------------------------------------------------------------------|------------|------------|
 | 1       | 600   | 600     | 0.701          | 180300 180300 180300 180300 180300 180300 180300 180300 180300 180300                                         | 28155851   | 62806742   |
@@ -153,6 +153,6 @@
 | 4       | 3000  | 3000    | 59.710         | 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 4.5015e+06 | 1693914279 | 1712132376 |
 
 
-##Conclusion
+## Conclusion
 In the tests made in a personal computer, inside a virtual machine and with other programs in the background, despite some predictability in the results, they were not fully conclusive and there were some unexpected results. The main cause might have been the noise in the background made by the other programs together with the limitations of a virtualized environment.
 This proved that a more sterilized environment was needed in order to reach the expected results
